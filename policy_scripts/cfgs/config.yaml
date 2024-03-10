@@ -5,7 +5,7 @@ defaults:
   - override hydra/launcher: submitit_local
 
 # Root Dir
-root_dir: '/home/siddhant/github/holodex-v2-policies'
+root_dir: '/home/xyz/github/Libero-sim-policies'
 
 # misc
 seed: 1
