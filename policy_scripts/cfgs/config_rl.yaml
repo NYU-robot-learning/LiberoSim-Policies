@@ -1,0 +1,57 @@
+defaults:
+  - _self_
+  - agent: drqv2
+  - suite: metaworld
+  - override hydra/launcher: submitit_local
+
+# Root Dir
+root_dir: '/home/siddhant/github/holodex-v2-policies'
+
+# misc
+seed: 1
+device: cuda
+save_video: true
+save_train_video: true
+use_tb: true
+batch_size: 256
+
+# replay buffer
+replay_buffer_size: 150000
+replay_buffer_num_workers: 2
+nstep: 3
+
+# experiment
+obs_type: 'pixels' # pixels, features
+irl: true
+encoder_type: 'base' # base, patch, resnet
+policy_type: 'mlp' # mlp, gpt
+policy_head: deterministic # deterministic, gmm
+use_proprio: false
+prompt: null # null, text, goal, episode, subsample_X (X is subsample ratio)
+experiment: debug_mw_rot_irl
+
+# action chunking
+temporal_agg: false # aggregate actions over time
+num_queries: 10
+
+# expert dataset
+expert_dataset: ${suite.dataset_fn}
+
+# Load weights
+load_bc: true
+bc_weight: /home/siddhant/github/holodex-v2-policies/policy_scripts/exp_local/2023.12.29/143409_mw_bc_hammer_train_encoder/snapshot.pt
+
+# Train with BC loss
+bc_regularize: true
+bc_weight_type: 'qfilter' # linear, qfilter
+
+hydra:
+  run:
+    dir: ./exp_local/${now:%Y.%m.%d}/${now:%H%M%S}_${experiment}
+  sweep:
+    dir: ./exp_local/${now:%Y.%m.%d}/${now:%H%M%S}
+    subdir: ${hydra.job.num}
+  launcher:
+    tasks_per_node: 1
+    nodes: 1
+    submitit_folder: ./exp_local/${now:%Y.%m.%d}/${now:%H%M%S}_${experiment}/.slurm

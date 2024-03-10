@@ -1,0 +1,37 @@
+# @package agent
+_target_: agent.drqv2.DrQv2Agent
+obs_shape: ??? # to be specified later
+action_shape: ??? # to be specified later
+device: ${device}
+lr: 1e-4
+hidden_dim: ${suite.hidden_dim}
+critic_target_tau: 0.01
+num_expl_steps: 0 #2000
+update_every_steps: 2
+stddev_schedule: 0.1 #'linear(1.0,0.1,${suite.num_train_steps})'
+stddev_clip: 0.3
+use_tb: ${use_tb}
+augment: True
+encoder_type: ${encoder_type}
+policy_type: ${policy_type}
+policy_head: ${policy_head}
+pixel_keys: ${suite.pixel_keys}
+proprio_key: ${suite.proprio_key}
+feature_key: ${suite.feature_key}
+use_proprio: ${use_proprio}
+obs_type: ${obs_type}
+bc_weight_type: ${bc_weight_type}
+bc_weight_schedule: 'linear(1.0,0.1,20000)'
+rewards: sinkhorn_cosine
+sinkhorn_rew_scale: 200
+update_target_every: 10000
+auto_rew_scale: True
+auto_rew_scale_factor: 10
+norm: false
+history: ${suite.history}
+history_len: ${suite.history_len}
+eval_history_len: ${suite.eval_history_len}
+separate_encoders: false # have a separate encoder for each pixel key
+temporal_agg: ${temporal_agg}
+max_episode_len: ${suite.task_make_fn.max_episode_len} # to be specified later
+num_queries: ${num_queries}
